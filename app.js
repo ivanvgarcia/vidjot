@@ -17,14 +17,15 @@ const users = require('./routes/users');
 // Passport Configuration
 require('./config/passport')(passport);
 
+// DB Config
+const db = require('./config/database');
+
 // Connects to mongoose
-mongoose.connect('mongodb://localhost/vidjot-dev', {
+mongoose.connect(db.mongoURI, {
     useNewUrlParser: true
 })
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.log(err));
-
-const port = process.env.PORT || 3000;
 
 // Handlebars Middleware
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
@@ -79,6 +80,8 @@ app.get('/about', (req, res) => {
 // Use routes
 app.use('/ideas', ideas);
 app.use('/users', users);
+
+const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
     console.log(`Server Running on Port ${port}`);
